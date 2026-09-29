@@ -9,7 +9,7 @@ class Spielfeld:
             for _ in range(9):
                 self.steine.append(Stein.Stein(farbe=bool(i)))
 
-    def is_on_field(self, pos: tuple([int,int,int])) -> bool:
+    def is_on_field(self, pos: tuple[int,int,int]) -> bool:
         if not all([i in range(3) for i in pos]) or pos[1] == pos[2] == 1:
             return False
         else:
