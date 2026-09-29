@@ -47,3 +47,27 @@ class Spielfeld:
                     if (not (j == k == 1)) and self.felder[i][j][k] is spieler:
                         count += 1
         return count
+
+    def check_mühle(self,pos: tuple[int,int,int]):
+        
+        if (pos[1] + pos[2]) % 2 == 1:
+            if all[[self.felder[i,pos[1],pos[2]] == self.felder[pos[0],pos[1],pos[2]] for i in range(3)]]:
+                 return True
+            elif pos[1] == 1 and self.check_col(pos):
+                return True
+            elif pos[2] == 1 and self.check_row(pos):
+                return True
+            
+        else: 
+            if self.check_row(pos) or self.check_col(pos):
+                return True
+        return False
+            
+    def check_row(self, pos: tuple[int,int,int]):
+        if all[[self.felder[pos[0],i,pos[2]] == self.felder[pos[0],pos[1],pos[2]] for i in range(3)]]:
+            return True
+        return False
+    def check_col(self, pos: tuple[int,int,int]):
+        if all[[self.felder[pos[0],pos[1],i] == self.felder[pos[0],pos[1],pos[2]] for i in range(3)]]:
+                return True
+        return False
