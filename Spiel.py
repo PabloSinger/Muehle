@@ -58,7 +58,7 @@ class Spiel:
         self.zug += 1
         
         consol_graphics.draw(self.spielfeld.felder)
-      except (ValueError, SyntaxError) as e:
+      except (ValueError, SyntaxError, IndexError) as e:
         print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
         print(f"Details: {e}")
         
