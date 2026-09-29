@@ -56,6 +56,7 @@ class Spiel:
           print("keine gültige eingabe!")
           continue
         self.zug += 1
+        print("zug:",self.zug)
         consol_graphics.draw(self.spielfeld.felder)
       except (ValueError, SyntaxError) as e:
         print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
@@ -72,7 +73,7 @@ class Spiel:
           self.spielphase = 1
           if 4 > self.spielfeld.get_piece_count(self.zug%2):
               self.spielphase = 2
-
+        print("spielphase", self.spielphase)
 
         if self.zug%2:
               self.cur_player ="black"
@@ -85,5 +86,3 @@ class Spiel:
 if __name__ == "__main__":
     spiel = Spiel()
   
-
-
