@@ -37,7 +37,7 @@ class Spiel:
               print("spiel beendet!")
               break
 
-        if all(map(self.spielfeld.field_exists(ergebnis))):
+        if all(map(self.spielfeld.field_exists,ergebnis)):
           if self.spielphase == 0:
             if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],0):
               self.spielfeld.move((-1,-1,-1),ergebnis[0])
