@@ -19,6 +19,7 @@ class Spiel:
     
   def new_game(self):
     self.zug = 0
+    spielphase = 0
     self.cur_player = "white"
     self.playing = True
     self.spielfeld.reset()
