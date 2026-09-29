@@ -15,6 +15,12 @@ class Spiel:
     self.spielfeld = Spielfeld.Spielfeld()
     self.new_game()
     
+  def new_game(self):
+    self.zug = 0
+    self.cur_player = "white"
+    self.playing = True
+    self.spielfeld.reset()
+    self.gameloop()
 
 
   def gameloop(self):
@@ -62,12 +68,6 @@ class Spiel:
      
 
 
-  def new_game(self):
-    self.zug = 0
-    self.cur_player = "white"
-    self.playing = True
-    self.spielfeld.reset()
-    self.gameloop()
 
 
 if __name__ == "__main__":
