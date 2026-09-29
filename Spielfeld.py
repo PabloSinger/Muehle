@@ -9,6 +9,10 @@ class Spielfeld:
             for _ in range(9):
                 self.steine.append(Stein.Stein(farbe=bool(i)))
 
+    def is_on_field(self, pos: tuple([int,int,int]) -> bool:
+        
+        
+
     def check_move(self, start: tuple[int, int, int], ziel: tuple[int, int, int], spielphase: int) -> bool:
         assert spielphase in range(3)   # Spielphasen: 0=Setzphase, 1=Zugphase, 2=Endphase
         for stein in self.steine:
