@@ -1,35 +1,18 @@
-import Stein
-
+type position = tuple[int, int, int]
 
 class Spielfeld:
-    felder: list[list[list[int]]]
-    steine: list[Stein.Stein]
-
-    def reset(self):
-        
-        for i in range(3):
-            for k in range(3):
-                for l in range(3):
-                    if not l == k == 1:
-                        self.felder[i][k][l] = None
-
-    
+    felder: list[list[list[bool|None]]]
+    # steine: list[Stein.Stein]
     def __init__(self) -> None:
-        for i in range(2):  # Steine-Liste initialisieren, neun schwarze und neun weiße.
-            for _ in range(9):
-                self.steine.append(Stein.Stein(farbe=bool(i)))
+        self.reset()
 
-    def is_on_field(self, pos: tuple[int,int,int]) -> bool:
-        if not all([i in range(3) for i in pos]) or pos[1] == pos[2] == 1:
-            return False
-        else:
-            return True
-        
+    def field_exists(self, pos: position) -> bool:
+        return all(i in range(3) for i in pos) or not (pos[1] == pos[2] == 1)
 
-    def check_move(self, start: tuple[int, int, int], ziel: tuple[int, int, int], spielphase: int) -> bool:
+
+    def check_move(self, start: position, ziel: position, spielphase: int) -> bool:
         assert spielphase in range(3)   # Spielphasen: 0=Setzphase, 1=Zugphase, 2=Endphase
-        for stein in self.steine:
-            if stein.pos == ziel:
+        if self.felder[ziel[0]][ziel[1]][ziel[2]] != None:
                 return False        # Es darf nicht bereits ein Stein auf dem Zielfeld liegen.
         if spielphase == 1:
             if start[0] != ziel[0]:
@@ -42,31 +25,48 @@ class Spielfeld:
                 if diff != 1: return False  # in der Zugphase muss genau ein Feld weiter gerückt werden.
         return True
 
+    def reset(self) -> None:
+        self.felder = [[[None for _ in range(3)] for _ in range(3)] for _ in range(3)]
+
+    def check_for_piece(self, pos: position) -> bool|None: # None=nix, False=weiß, True=schwarz
+        return self.felder[pos[0]][pos[1]][pos[2]]
+
+    def move_piece(self, start: position, ziel: position, spielphase: int) -> None:
+        if spielphase == 0:
+            self.felder[ziel[0]][ziel[1]][ziel[2]] = bool(start[0])
+        else:
+            self.felder[ziel[0]][ziel[1]][ziel[2]] = self.felder[start[0]][start[1]][start[2]]
+            self.felder[start[0]][start[1]][start[2]] = None
+
+    def get_piece_count(self, spieler: bool) -> int:
+        count = 0
+        for i in range(3):
+            for j in range(3):
+                for k in range(3):
+                    if (not (j == k == 1)) and self.felder[i][j][k] is spieler:
+                        count += 1
+        return count
 
     def check_mühle(self,pos: tuple[int,int,int]):
-        
+
         if (pos[1] + pos[2]) % 2 == 1:
-            if all([self.felder[i,pos[1],pos[2]] == self.felder[pos[0],pos[1],pos[2]] for i in range(3)]):
+            if all(self.felder[i][pos[1]][pos[2]] == self.felder[pos[0]][pos[1]][pos[2]] for i in range(3)):
                  return True
             elif pos[1] == 1 and self.check_col(pos):
                 return True
             elif pos[2] == 1 and self.check_row(pos):
                 return True
-            
-        else: 
+
+        else:
             if self.check_row(pos) or self.check_col(pos):
                 return True
         return False
-            
+
     def check_row(self, pos: tuple[int,int,int]):
-        if all(self.felder[pos[0],i,pos[2]] == self.felder[pos[0],pos[1],pos[2]] for i in range(3)):
+        if all(self.felder[pos[0]][i][pos[2]] == self.felder[pos[0]][pos[1]][pos[2]] for i in range(3)):
             return True
         return False
     def check_col(self, pos: tuple[int,int,int]):
-        if all([self.felder[pos[0],pos[1],i] == self.felder[pos[0],pos[1],pos[2]] for i in range(3)]):
+        if all(self.felder[pos[0]][pos[1]][i] == self.felder[pos[0]][pos[1]][pos[2]] for i in range(3)):
                 return True
         return False
-
-
-        
-        
