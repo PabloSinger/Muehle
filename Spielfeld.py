@@ -15,8 +15,12 @@ class Spielfeld:
             if stein.pos == ziel:
                 return False        # Es darf nicht bereits ein Stein auf dem Zielfeld liegen.
         if spielphase == 1:
-            diff = 0
-            for i in range(2):
-                diff += abs(start[i+1]-ziel[i+1])
-            if diff != 1: return False  # in der Zugphase muss genau ein Feld weiter gerückt werden.
+            if start[0] != ziel[0]:
+                if (start[1] + start[2]) % 2 != 1 and abs(start[0]-ziel[0]) != 1:
+                    return False
+            else:
+                diff = 0
+                for i in range(2):
+                    diff += abs(start[i+1]-ziel[i+1])
+                if diff != 1: return False  # in der Zugphase muss genau ein Feld weiter gerückt werden.
         return True
