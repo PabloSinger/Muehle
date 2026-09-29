@@ -43,11 +43,11 @@ class Spiel:
 
         if all(map(self.spielfeld.field_exists,ergebnis)):
           if self.spielphase == 0:
-            if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],0):
-              self.spielfeld.move((zug%2,-1,-1),ergebnis[0])
+            if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],self.spielphase):
+              self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
           else:
             if self.spielfeld.check_move(ergebnis[0],ergebnis[1],self.spielphase):
-              self.spielfeld.move(ergebnis[0],ergebnis[1])
+              self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
         else:
           print("keine gültige eingabe!")
           continue
@@ -55,7 +55,7 @@ class Spiel:
         print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
         print(f"Details: {e}")
     
-      zug += 1
+      self.zug += 1
       consol_graphics.draw(self.spielfeld.felder)
 
       
