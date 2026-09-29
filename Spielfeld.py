@@ -7,7 +7,7 @@ class Spielfeld:
     def __init__(self) -> None:
         self.reset()
 
-    def is_on_field(self, pos: position) -> bool:
+    def field_exists(self, pos: position) -> bool:
         return all(i in range(3) for i in pos) or not (pos[1] == pos[2] == 1)
 
 
