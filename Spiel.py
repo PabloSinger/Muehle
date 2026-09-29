@@ -47,6 +47,7 @@ class Spiel:
           if self.spielphase == 0:
             if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],self.spielphase):
               self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
+            else: continue
           else:
             if self.spielfeld.check_move(ergebnis[0],ergebnis[1],self.spielphase):
               self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
