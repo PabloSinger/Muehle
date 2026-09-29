@@ -40,7 +40,7 @@ class Spiel:
         if all(map(self.spielfeld.field_exists,ergebnis)):
           if self.spielphase == 0:
             if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],0):
-              self.spielfeld.move((-1,-1,-1),ergebnis[0])
+              self.spielfeld.move((zug%2,-1,-1),ergebnis[0])
           else:
             if self.spielfeld.check_move(ergebnis[0],ergebnis[1],self.spielphase):
               self.spielfeld.move(ergebnis[0],ergebnis[1])
