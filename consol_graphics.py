@@ -12,23 +12,24 @@ def draw( spielfeld):
             for j in range(3):
                 for k in range(3):
                   
-                    if i == 0:
-                         x = k
-                    elif i == 1:
-                          x = 3
-                    if i == 2:
-                         x = 6-k
-                      
                     if j == 0:
-                         y = 6-k
+                         x = i
                     elif j == 1:
-                          y = 3
+                          x = 3
                     if j == 2:
-                         y = k
+                         x = 6-i
+                      
+                    if k == 0:
+                         y = 6-i
+                    elif k == 1:
+                          y = 3
+                    if k == 2:
+                         y = i
                     if spielfeld[i][j][k] is not None:
-                      feld[x][y] = spielfeld[i][j][k] 
+                      feld[y][x] = spielfeld[i][j][k] 
                     
- 
-  
+     
+  for f in feld:
+       print(f)
     
         
