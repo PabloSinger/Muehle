@@ -37,6 +37,7 @@ class Spiel:
       try:
         user_in = input(self.cur_player +" ist am zug!")    # (q,x,y),(q,x,y)
         if user_in == "quit":
+                      self.playing = False
                       print("spiel beendet!")
                       break
         ergebnis = ast.literal_eval(f"[{user_in}]")
