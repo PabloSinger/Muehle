@@ -36,10 +36,11 @@ class Spiel:
       #user input wird ausgewertet
       try:
         user_in = input(self.cur_player +" ist am zug!")    # (q,x,y),(q,x,y)
-        ergebnis = ast.literal_eval(f"[{user_in}]")
         if user_in == "quit":
-              print("spiel beendet!")
-              break
+                      print("spiel beendet!")
+                      break
+        ergebnis = ast.literal_eval(f"[{user_in}]")
+        
 
         if all(map(self.spielfeld.field_exists,ergebnis)):
           if self.spielphase == 0:
@@ -62,14 +63,15 @@ class Spiel:
 
 
   def set_conditions(self):
+        if self.zug > 17:
+          self.spielphase = 1
+          if 4 > self.spielfeld.get_piece_count(self.zug%2):
+              self.spielphase = 2
 
-           if self.zug > 17: self.spielphase = 1
-           if 4 > self.spielfeld.get_piece_count(self.zug%2): self.spielphase = 2
 
-          
-           if self.zug%2:
+        if self.zug%2:
               self.cur_player ="black"
-           else: self.cur_player = "white"
+        else: self.cur_player = "white"
      
 
 
