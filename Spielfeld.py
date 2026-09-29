@@ -7,7 +7,7 @@ class Spielfeld:
         self.reset()
 
     def field_exists(self, pos: position) -> bool:
-        return all(i in range(3) for i in pos) or not (pos[1] == pos[2] == 1)
+        return all(i in range(3) for i in pos) and not (pos[1] == pos[2] == 1)
 
 
     def check_move(self, start: position, ziel: position, spielphase: int) -> bool:
