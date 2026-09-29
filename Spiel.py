@@ -1,5 +1,5 @@
 import Spielfeld
-import Gui
+import ast
 
 class Spiel:
   gui = None
@@ -7,6 +7,7 @@ class Spiel:
   cur_player = None
   spielfeld = None
   playing = None
+  spielphase = None
 
 
 
@@ -14,24 +15,58 @@ class Spiel:
     self.spielfeld = Spielfeld.Spielfeld()
     self.new_game()
     
-   #self.gui = Gui.Gui()
-   #self.gui.mainloop()
+
 
   def gameloop(self):
+
     print("spiel startet")
     while self.playing:
-      print("ja")
-      user_in = input(self.cur_player +" ist am zug!")
-      if user_in == "quit":
-        print("spiel beendet!")
-        break
+      self.set_conditions
+     
+      #user input wird ausgewertet
+      try:
+        user_in = input(self.cur_player +" ist am zug!")    # (q,x,y),(q,x,y)
+        ergebnis = ast.literal_eval(f"[{user_in}]")
+        if user_in == "quit":
+              print("spiel beendet!")
+              break
+
+        if all(map(self.spielfeld.is_on_field,ergebnis)):
+          if self.spielphase == 0:
+            if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],0):
+              self.spielfeld.move((-1,-1,-1),ergebnis[0])
+          else:
+            if self.spielfeld.check_move(ergebnis[0],ergebnis[1],self.spielphase):
+              self.spielfeld.move(ergebnis[0],ergebnis[1])
+        else:
+          print("keine gültige eingabe!")
+          continue
+      except (ValueError, SyntaxError) as e:
+        print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
+        print(f"Details: {e}")
+    
+      zug += 1
+
+      
+
+
+  def set_conditions(self):
+
+           if self.zug > 17: self.spielphase = 1
+           if 4 > self.spielfeld.get_piece_count(self.zug%2): self.spielphase = 2
+
+          
+           if self.zug%2:
+              self.cur_player ="black"
+           else: self.cur_player = "white"
+     
 
 
   def new_game(self):
     self.zug = 0
     self.cur_player = "white"
     self.playing = True
-    #self.spielfeld.reset()
+    self.spielfeld.reset()
     self.gameloop()
 
 
