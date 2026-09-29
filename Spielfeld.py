@@ -28,7 +28,7 @@ class Spielfeld:
     def reset(self) -> None:
         self.felder = [[[None for _ in range(3)] for _ in range(3)] for _ in range(3)]
 
-    def check_for_piece(self, pos: position) -> bool|None: # None=nix, False=weiß, True=schwarz
+    def get_field_state(self, pos: position) -> bool|None: # None=nix, False=weiß, True=schwarz
         return self.felder[pos[0]][pos[1]][pos[2]]
 
     def move_piece(self, start: position, ziel: position, spielphase: int) -> None:
