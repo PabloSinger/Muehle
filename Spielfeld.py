@@ -10,7 +10,8 @@ class Spielfeld:
                 self.steine.append(Stein.Stein(farbe=bool(i)))
 
     def is_on_field(self, pos: tuple([int,int,int]) -> bool:
-        
+        if not all([i in range(3) for i in pos]) or pos[1] = pos[2] = 1 :
+            return true
         
 
     def check_move(self, start: tuple[int, int, int], ziel: tuple[int, int, int], spielphase: int) -> bool:
