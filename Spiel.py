@@ -51,15 +51,18 @@ class Spiel:
           else:
             if self.spielfeld.check_move(ergebnis[0],ergebnis[1],self.spielphase):
               self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
+            else: continue
         else:
           print("keine gültige eingabe!")
           continue
+        self.zug += 1
+        consol_graphics.draw(self.spielfeld.felder)
       except (ValueError, SyntaxError) as e:
         print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
         print(f"Details: {e}")
+        
     
-      self.zug += 1
-      consol_graphics.draw(self.spielfeld.felder)
+      
 
       
 
