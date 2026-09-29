@@ -9,11 +9,12 @@ class Spiel:
   spielfeld = None
   playing = None
   spielphase = None
-  graphics = consol_graphics
+
 
 
   def __init__(self):
     self.spielfeld = Spielfeld.Spielfeld()
+   
     self.new_game()
     
   def new_game(self):
@@ -22,6 +23,7 @@ class Spiel:
     self.playing = True
     self.spielfeld.reset()
     self.gameloop()
+    
 
 
   def gameloop(self):
@@ -53,6 +55,7 @@ class Spiel:
         print(f"Details: {e}")
     
       zug += 1
+      consol_graphics.draw(self.spielfeld.felder)
 
       
 
