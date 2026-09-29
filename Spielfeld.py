@@ -40,10 +40,10 @@ class Spielfeld:
             self.felder[start[0]][start[1]][start[2]] = None
 
     def get_piece_count(self, spieler: bool) -> int:
-        result = []
+        count = 0
         for i in range(3):
             for j in range(3):
                 for k in range(3):
-                    if not (j == k == 1):
-                        result.append(self.felder[i][j][k])
-        return len(result)
+                    if (not (j == k == 1)) and self.felder[i][j][k] is spieler:
+                        count += 1
+        return count
