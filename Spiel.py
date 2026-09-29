@@ -1,5 +1,6 @@
 import Spielfeld
 import ast
+import consol_graphics
 
 class Spiel:
   gui = None
@@ -8,7 +9,7 @@ class Spiel:
   spielfeld = None
   playing = None
   spielphase = None
-
+  graphics = consol_graphics
 
 
   def __init__(self):
