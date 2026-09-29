@@ -26,7 +26,7 @@ def draw( spielfeld):
                     if k == 2:
                          y = i
                     if spielfeld[i][j][k] is not None:
-                      feld[y][x] = int(spielfeld[i][j][k])
+                      feld[y][x] = str(int(spielfeld[i][j][k]))
                     
      
   for f in feld:
