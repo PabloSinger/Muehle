@@ -31,7 +31,7 @@ class Spiel:
 
     print("spiel startet")
     while self.playing:
-      self.set_conditions
+      self.set_conditions()
      
       #user input wird ausgewertet
       try:
