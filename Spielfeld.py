@@ -79,6 +79,8 @@ class Spielfeld:
         if self.check_mühle(remove_pos):
             if all(map(self.check_mühle(),[feld == self.get_field_state(remove_pos) for feld in self])):
                 return True
-            else: return False
+            return False
+
+        
 
         return True
