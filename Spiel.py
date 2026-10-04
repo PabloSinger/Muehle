@@ -6,24 +6,25 @@ import copy
 class Spiel:
   gui = None
   zug  = None
-  cur_player = None
   spielfeld = None
   playing = None
   spielphase = None
   last_mühle = None
   snapshots = None
-
+  player = None
 
 
   def __init__(self):
+    self.player = {False: "Weis",True: "Schwarz"}
     self.spielfeld = Spielfeld.Spielfeld()
+    
 
 
   def new_game(self):
     self.zug = 0
     self.spielphase = 0
     self.last_mühle = 0
-    self.cur_player = "white"
+   
     self.playing = True
     self.spielfeld.reset()
     self.snapshots = list()
@@ -70,12 +71,10 @@ class Spiel:
                print("draw!")
                self.playing = False
             if self.check_win():
-               
-
-               
-
-
-
+               print()
+               self.playing = False
+              
+  
 
   def set_conditions(self):
         if self.zug > 17:
@@ -85,15 +84,13 @@ class Spiel:
         print("spielphase", self.spielphase)
         print("zug:",self.zug)
 
-        if self.zug%2:
-              self.cur_player ="black"
-        else: self.cur_player = "white"
+   
 
   def get_user_input(self, message: str):
       
-      user_in = input(self.cur_player +": " + message) 
+      user_in = input(self.player[bool(self.zug%2)]+": " + message) 
 
-      if user_in = "new": self.playing = False;self.new_game()
+      if user_in == "new": self.playing = False;self.new_game()
          # (q,x,y),(q,x,y)
       return ast.literal_eval(f"[{user_in}]")
 
@@ -124,6 +121,8 @@ class Spiel:
       else:
         return self.spielfeld.check_mühle(user_in[0])
 
+      
+
   def handle_mühle(self) -> None:
     gegner = (self.zug + 1) % 2
     while True:
@@ -146,10 +145,14 @@ class Spiel:
   def check_draw(self) -> bool:
       return self.last_mühle == 50 or self.snapshots.count(self.spielfeld.felder) == 2
 
-  def check_win(self) -> bool:
-      return self.spielphase > 17 and (self.spielfeld.get_piece_count(False) < 3 or (self.spielfeld.get_piece_count(True) < 3))
-
-
+  def check_win(self) -> bool|None:
+    if self.spielphase > 17:
+      if self.spielfeld.get_piece_count(False) < 3:
+           return True
+      elif self.spielfeld.get_piece_count(True):
+            return False
+    return None
+  
 if __name__ == "__main__":
     spiel = Spiel()
     spiel.new_game()
