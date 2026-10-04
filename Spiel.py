@@ -63,7 +63,7 @@ class Spiel:
             else:
               self.last_mühle += 1
             self.zug += 1
-                    consol_graphics.draw(self.spielfeld.felder)
+            consol_graphics.draw(self.spielfeld.felder)
 
 
 
