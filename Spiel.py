@@ -37,11 +37,12 @@ class Spiel:
         user_in = self.get_user_input()
 
         if self.check_move(user_in):
-            self.move(user_in)
-            self.handle_mühle()
+            self.move(user_in)  
+            if self.check_mühle:
+              self.handle_mühle()
         else: continue
-        self.zug += 1
 
+        self.zug += 1
         consol_graphics.draw(self.spielfeld.felder)
       except (ValueError, SyntaxError, IndexError) as e:
         print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
@@ -85,6 +86,12 @@ class Spiel:
       else:
           self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
 
+  def check_mühle(self,user_in)-> bool:
+      if self.spielphase:
+        return self.spielfeld.check_mühle(user_in[1])
+      else:
+        return self.spielfeld.check_mühle(user_in[0])
+      
   def handle_mühle(self) -> None:
     gegner = (self.zug + 1) % 2
     while True:
