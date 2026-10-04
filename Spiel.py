@@ -136,6 +136,9 @@ class Spiel:
   def check_draw(self) -> bool:
       return self.last_mühle == 50 or self.snapshots.count(self.spielfeld.felder) == 2
 
+  def check_win(self) -> bool:
+      return self.spielphase > 17 and (self.spielfeld.get_piece_count(False) or (self.spielfeld.get_piece_count(True)))
+
 
 if __name__ == "__main__":
     spiel = Spiel()
