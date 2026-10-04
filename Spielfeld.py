@@ -47,6 +47,9 @@ class Spielfeld:
                         count += 1
         return count
 
+    def remove_piece(self, pos: position) -> None:
+        self.felder[pos[0]][pos[1]][pos[2]] = None
+
     def check_mühle(self,pos: tuple[int,int,int]):
 
         if (pos[1] + pos[2]) % 2 == 1:
