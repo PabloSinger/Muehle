@@ -106,7 +106,7 @@ class Spiel:
         except ValueError:
             print("Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y).")
             continue
-        if self.spielfeld.get_field_state(remove_pos) == gegner:
+        if self.spielfeld.get_field_state(remove_pos) == gegner and self.spielfeld.is_removable(remove_pos):
             self.spielfeld.remove_piece(remove_pos)
             return
 
