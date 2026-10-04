@@ -86,13 +86,17 @@ class Spiel:
           self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
 
 def handle_mühle(self) -> None:
-    gegner = self.zug % 2
+    gegner = (self.zug + 1) % 2
     while True:
         try:
             remove_pos = self.get_user_input()[0]
+            if not self.spielfeld.field_exists(remove_pos):
+                print("Feld existiert nicht!")
+                continue
         except ValueError:
             print("Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y).")
-        if self.spielfeld.get_field_state(remove_pos) != gegner:
+            continue
+        if self.spielfeld.get_field_state(remove_pos) == gegner:
             self.spielfeld.remove_piece(remove_pos)
             return
 
