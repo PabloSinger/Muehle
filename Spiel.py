@@ -38,13 +38,14 @@ class Spiel:
 
         if self.check_move(user_in):
             self.move(user_in)  
-
+            consol_graphics.draw(self.spielfeld.felder)
             if self.check_mühle(user_in):
               self.handle_mühle()
+              consol_graphics.draw(self.spielfeld.felder)
         else: continue
 
         self.zug += 1
-        consol_graphics.draw(self.spielfeld.felder)
+       
       except (ValueError, SyntaxError, IndexError) as e:
         print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
         print(f"Details: {e}")
@@ -96,6 +97,7 @@ class Spiel:
   def handle_mühle(self) -> None:
     gegner = (self.zug + 1) % 2
     while True:
+        print("gebe bitte die zu entfernende positition ein")
         try:
             remove_pos = self.get_user_input()[0]
             if not self.spielfeld.field_exists(remove_pos):
