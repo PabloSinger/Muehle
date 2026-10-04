@@ -20,12 +20,10 @@ class Spiel:
   def new_game(self):
     self.zug = 0
     self.spielphase = 0
-    self.last_mühle = 0
     self.cur_player = "white"
     self.playing = True
     self.spielfeld.reset()
     self.gameloop()
-
 
 
   def gameloop(self):
@@ -36,7 +34,16 @@ class Spiel:
 
       #user input wird ausgewertet
       try:
-       
+
+        
+        
+
+      except (ValueError, SyntaxError, IndexError) as e:
+        print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
+        print(f"Details: {e}")
+
+  def spielzug(self):
+     
         user_in = self.get_user_input("Gib einen Zug ein!")
 
         if self.check_move(user_in):
@@ -49,11 +56,6 @@ class Spiel:
 
         self.last_mühle += 1
         self.zug += 1
-
-      except (ValueError, SyntaxError, IndexError) as e:
-        print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
-        print(f"Details: {e}")
-
 
   def set_conditions(self):
         if self.zug > 17:
@@ -111,10 +113,11 @@ class Spiel:
             print("Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y).")
             continue
         if self.spielfeld.get_field_state(remove_pos) == gegner and self.spielfeld.is_removable(remove_pos):
+            
             self.spielfeld.remove_piece(remove_pos)
             return
 
-
+  
 if __name__ == "__main__":
     spiel = Spiel()
     spiel.new_game()
