@@ -42,21 +42,7 @@ class Spiel:
                       break
         ergebnis = ast.literal_eval(f"[{user_in}]")
         
-
-        if all(map(self.spielfeld.field_exists,ergebnis)):
-          if self.spielphase == 0:
-            if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],self.spielphase):
-              self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
-              if self.spielfeld.check_mühle(ergebnis[0]):print("mühle")
-            else: print("Ungültiges Format!");continue
-          else:
-            if self.spielfeld.check_move(ergebnis[0],ergebnis[1],self.spielphase):
-              self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
-              if self.spielfeld.check_mühle(ergebnis[1]):print("mühle")
-            else: print("Ungültiges Format!");continue
-        else:
-          print("keine gültige eingabe!")
-          continue
+        if not self.check_move(ergebnis): continue
         self.zug += 1
         
         consol_graphics.draw(self.spielfeld.felder)
@@ -77,6 +63,22 @@ class Spiel:
               self.cur_player ="black"
         else: self.cur_player = "white"
 
+  def check_move(self, ergebnis):
+      
+        if all(map(self.spielfeld.field_exists,ergebnis)):
+          if self.spielphase == 0:
+            if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],self.spielphase):
+              self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
+              if self.spielfeld.check_mühle(ergebnis[0]):  print("mühle!")
+            else: print("Ungültiges Format!");return False
+          else:
+            if self.spielfeld.check_move(ergebnis[0],ergebnis[1],self.spielphase):
+              self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
+              if self.spielfeld.check_mühle(ergebnis[1]):  print("mühle!")
+            else: print("Ungültiges Format!");return False
+        else:
+          print("keine gültige eingabe!")
+          return False
 
 
 if __name__ == "__main__":
