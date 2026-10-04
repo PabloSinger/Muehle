@@ -34,10 +34,10 @@ class Spiel:
 
       #user input wird ausgewertet
       try:
-        user_in = self.get_user_input()
+        user_in = self.get_user_input("Gib einen Zug ein!")
 
         if self.check_move(user_in):
-            self.move(user_in)  
+            self.move(user_in)
             consol_graphics.draw(self.spielfeld.felder)
             if self.check_mühle(user_in):
               self.handle_mühle()
@@ -45,7 +45,7 @@ class Spiel:
         else: continue
 
         self.zug += 1
-       
+
       except (ValueError, SyntaxError, IndexError) as e:
         print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
         print(f"Details: {e}")
@@ -63,8 +63,8 @@ class Spiel:
               self.cur_player ="black"
         else: self.cur_player = "white"
 
-  def get_user_input(self):
-      user_in = input(self.cur_player +" ist am zug!")    # (q,x,y),(q,x,y)
+  def get_user_input(self, message: str):
+      user_in = input(self.cur_player +": " + message)    # (q,x,y),(q,x,y)
       return ast.literal_eval(f"[{user_in}]")
 
   def check_move(self, ergebnis)-> bool:
@@ -81,7 +81,7 @@ class Spiel:
         else:
           print("keine gültige eingabe!")
           return False
-        
+
   def move(self, ergebnis):
       if self.spielphase == 0:
         self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
@@ -93,13 +93,13 @@ class Spiel:
         return self.spielfeld.check_mühle(user_in[1])
       else:
         return self.spielfeld.check_mühle(user_in[0])
-      
+
   def handle_mühle(self) -> None:
     gegner = (self.zug + 1) % 2
     while True:
         print("gebe bitte die zu entfernende positition ein")
         try:
-            remove_pos = self.get_user_input()[0]
+            remove_pos = self.get_user_input("Welcher Stein soll entfernt werden?")[0]
             if not self.spielfeld.field_exists(remove_pos):
                 print("Feld existiert nicht!")
                 continue
