@@ -38,6 +38,7 @@ class Spiel:
 
         if self.check_move(user_in):
             self.move(user_in)
+            self.handle_mühle()
         else: continue
         self.zug += 1
 
@@ -65,7 +66,6 @@ class Spiel:
 
   def check_move(self, ergebnis)-> bool:
 
-
         if all(map(self.spielfeld.field_exists,ergebnis)):
           if self.spielphase == 0:
             if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],self.spielphase):
@@ -78,14 +78,14 @@ class Spiel:
         else:
           print("keine gültige eingabe!")
           return False
+        
   def move(self, ergebnis):
       if self.spielphase == 0:
         self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
-
       else:
           self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
 
-def handle_mühle(self) -> None:
+  def handle_mühle(self) -> None:
     gegner = (self.zug + 1) % 2
     while True:
         try:
