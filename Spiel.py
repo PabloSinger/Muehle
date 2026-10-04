@@ -14,8 +14,8 @@ class Spiel:
 
   def __init__(self):
     self.spielfeld = Spielfeld.Spielfeld()
-    
-    
+
+
   def new_game(self):
     self.zug = 0
     self.spielphase = 0
@@ -23,7 +23,7 @@ class Spiel:
     self.playing = True
     self.spielfeld.reset()
     self.gameloop()
-    
+
 
 
   def gameloop(self):
@@ -31,16 +31,16 @@ class Spiel:
     print("spiel startet")
     while self.playing:
       self.set_conditions()
-     
+
       #user input wird ausgewertet
       try:
         user_in = self.get_user_input()
 
-        if self.check_move(user_in): 
+        if self.check_move(user_in):
             self.move(user_in)
         else: continue
         self.zug += 1
-        
+
         consol_graphics.draw(self.spielfeld.felder)
       except (ValueError, SyntaxError, IndexError) as e:
         print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
@@ -60,12 +60,12 @@ class Spiel:
         else: self.cur_player = "white"
 
   def get_user_input(self):
-      user_in = input(self.cur_player +" ist am zug!")    # (q,x,y),(q,x,y)  
+      user_in = input(self.cur_player +" ist am zug!")    # (q,x,y),(q,x,y)
       return ast.literal_eval(f"[{user_in}]")
-      
+
   def check_move(self, ergebnis)-> bool:
-        
-      
+
+
         if all(map(self.spielfeld.field_exists,ergebnis)):
           if self.spielphase == 0:
             if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],self.spielphase):
@@ -81,12 +81,22 @@ class Spiel:
   def move(self, ergebnis):
       if self.spielphase == 0:
         self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
-                
+
       else:
           self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
-                    
+
+def handle_mühle(self) -> None:
+    gegner = self.zug % 2
+    while True:
+        try:
+            remove_pos = self.get_user_input()[0]
+        except ValueError:
+            print("Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y).")
+        if self.spielfeld.get_field_state(remove_pos) != gegner:
+            self.spielfeld.remove_piece(remove_pos)
+            return
+
 
 if __name__ == "__main__":
     spiel = Spiel()
     spiel.new_game()
-  
