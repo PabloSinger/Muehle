@@ -1,6 +1,7 @@
 import Spielfeld
 import ast
 import consol_graphics
+import copy
 
 class Spiel:
   gui = None
@@ -54,15 +55,16 @@ class Spiel:
 
         if self.check_move(user_in):
             self.move(user_in)
-            consol_graphics.draw(self.spielfeld.felder)
+          
             if self.check_mühle(user_in):
               self.handle_mühle()
+              consol_graphics.draw(self.spielfeld.felder)
               self.last_mühle = 0
             else:
               self.last_mühle += 1
             self.zug += 1
+                    consol_graphics.draw(self.spielfeld.felder)
 
-        consol_graphics.draw(self.spielfeld.felder)
 
 
 
