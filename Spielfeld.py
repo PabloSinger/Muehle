@@ -6,6 +6,13 @@ class Spielfeld:
     def __init__(self) -> None:
         self.reset()
 
+    def __iter__(self):
+        for i in range(3):
+            for j in range(3):
+                for k in range(3):
+                    if not (j == k == 1):
+                        yield self.felder[i][j][k]
+
     def field_exists(self, pos: position) -> bool:
         return all(i in range(3) for i in pos) and not (pos[1] == pos[2] == 1)
 
@@ -39,13 +46,7 @@ class Spielfeld:
             self.felder[start[0]][start[1]][start[2]] = None
 
     def get_piece_count(self, spieler: bool) -> int:
-        count = 0
-        for i in range(3):
-            for j in range(3):
-                for k in range(3):
-                    if (not (j == k == 1)) and self.felder[i][j][k] is spieler:
-                        count += 1
-        return count
+        return len([i == spieler for i in self])
 
     def remove_piece(self, pos: position) -> None:
         self.felder[pos[0]][pos[1]][pos[2]] = None
