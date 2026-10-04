@@ -20,6 +20,7 @@ class Spiel:
   def new_game(self):
     self.zug = 0
     self.spielphase = 0
+    self.last_mühle = 0(0)
     self.cur_player = "white"
     self.playing = True
     self.spielfeld.reset()
@@ -51,7 +52,7 @@ class Spiel:
             consol_graphics.draw(self.spielfeld.felder)
             if self.check_mühle(user_in):
               self.handle_mühle()
-              
+              self.last_mühle = 0
             else:
               self.last_mühle += 1
             self.zug += 1
