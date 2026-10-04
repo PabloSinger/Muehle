@@ -65,6 +65,7 @@ class Spiel:
             else:
               self.last_mühle += 1
             self.zug += 1
+            self.take_snapshot()
 
 
 
