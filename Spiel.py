@@ -20,6 +20,7 @@ class Spiel:
   def new_game(self):
     self.zug = 0
     self.spielphase = 0
+    self.last_mühle = 0
     self.cur_player = "white"
     self.playing = True
     self.spielfeld.reset()
