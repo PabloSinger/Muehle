@@ -14,8 +14,7 @@ class Spiel:
 
   def __init__(self):
     self.spielfeld = Spielfeld.Spielfeld()
-   
-    self.new_game()
+    
     
   def new_game(self):
     self.zug = 0
@@ -42,7 +41,9 @@ class Spiel:
                       break
         ergebnis = ast.literal_eval(f"[{user_in}]")
         
-        if not self.check_move(ergebnis): continue
+        if self.check_move(ergebnis): 
+            self.move(ergebnis)
+        else: continue
         self.zug += 1
         
         consol_graphics.draw(self.spielfeld.felder)
@@ -63,24 +64,29 @@ class Spiel:
               self.cur_player ="black"
         else: self.cur_player = "white"
 
-  def check_move(self, ergebnis):
+  def check_move(self, ergebnis)-> bool:
       
         if all(map(self.spielfeld.field_exists,ergebnis)):
           if self.spielphase == 0:
             if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],self.spielphase):
-              self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
-              if self.spielfeld.check_mühle(ergebnis[0]):  print("mühle!")
+                return True
             else: print("Ungültiges Format!");return False
           else:
             if self.spielfeld.check_move(ergebnis[0],ergebnis[1],self.spielphase):
-              self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
-              if self.spielfeld.check_mühle(ergebnis[1]):  print("mühle!")
+              return True
             else: print("Ungültiges Format!");return False
         else:
           print("keine gültige eingabe!")
           return False
-
+  def move(self, ergebnis):
+      if self.spielphase == 0:
+        self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
+                
+      else:
+          self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
+                    
 
 if __name__ == "__main__":
     spiel = Spiel()
+    spiel.new_game()
   
