@@ -1,10 +1,12 @@
 type position = tuple[int, int, int]
 
+
 class Spielfeld:
     felder: list[list[list[bool|None]]]
     # steine: list[Stein.Stein]
     def __init__(self) -> None:
         self.reset()
+
 
     def __iter__(self):
         for i in range(3):
@@ -77,9 +79,8 @@ class Spielfeld:
         
     def is_removable(self,remove_pos):
         if self.check_mühle(remove_pos):
-            return all(map(self.check_mühle(),[feld == self.get_field_state(remove_pos) for feld in self]))
-               
-
-        
+            return all(map(self.check_mühle,[feld == self.get_field_state(remove_pos) for feld in self]))
 
         return True
+
+    
