@@ -38,7 +38,8 @@ class Spiel:
 
         if self.check_move(user_in):
             self.move(user_in)  
-            if self.check_mühle:
+            consol_graphics.draw(self.spielfeld.felder)
+            if self.check_mühle(user_in):
               self.handle_mühle()
         else: continue
 
