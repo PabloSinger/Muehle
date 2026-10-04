@@ -9,6 +9,7 @@ class Spiel:
   spielfeld = None
   playing = None
   spielphase = None
+  last_mühle = None
 
 
 
@@ -34,6 +35,7 @@ class Spiel:
 
       #user input wird ausgewertet
       try:
+       
         user_in = self.get_user_input("Gib einen Zug ein!")
 
         if self.check_move(user_in):
@@ -41,9 +43,10 @@ class Spiel:
             consol_graphics.draw(self.spielfeld.felder)
             if self.check_mühle(user_in):
               self.handle_mühle()
+            
               consol_graphics.draw(self.spielfeld.felder)
-        else: continue
 
+        self.last_mühle += 1
         self.zug += 1
 
       except (ValueError, SyntaxError, IndexError) as e:
