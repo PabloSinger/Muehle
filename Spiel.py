@@ -35,7 +35,7 @@ class Spiel:
       #user input wird ausgewertet
       try:
 
-        
+        self.spielzug()
         
 
       except (ValueError, SyntaxError, IndexError) as e:
