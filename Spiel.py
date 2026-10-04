@@ -47,10 +47,12 @@ class Spiel:
           if self.spielphase == 0:
             if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],self.spielphase):
               self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
+              self.spielfeld.check_mühle(ergebnis[0])
             else: print("Ungültiges Format!");continue
           else:
             if self.spielfeld.check_move(ergebnis[0],ergebnis[1],self.spielphase):
               self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
+              self.spielfeld.check_mühle(ergebnis[1])
             else: print("Ungültiges Format!");continue
         else:
           print("keine gültige eingabe!")
@@ -61,11 +63,6 @@ class Spiel:
       except (ValueError, SyntaxError, IndexError) as e:
         print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
         print(f"Details: {e}")
-        
-    
-      
-
-      
 
 
   def set_conditions(self):
@@ -79,8 +76,6 @@ class Spiel:
         if self.zug%2:
               self.cur_player ="black"
         else: self.cur_player = "white"
-     
-
 
 
 
