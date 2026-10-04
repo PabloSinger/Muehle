@@ -71,7 +71,7 @@ class Spiel:
                print("draw!")
                self.playing = False
             if self.check_win():
-               print()
+               print(self.player[self.check_win()])
                self.playing = False
               
   
