@@ -77,9 +77,8 @@ class Spielfeld:
         
     def is_removable(self,remove_pos):
         if self.check_mühle(remove_pos):
-            if all(map(self.check_mühle(),[feld == self.get_field_state(remove_pos) for feld in self])):
-                return True
-            return False
+            return all(map(self.check_mühle(),[feld == self.get_field_state(remove_pos) for feld in self])):
+               
 
         
 
