@@ -66,8 +66,13 @@ class Spiel:
               self.last_mühle += 1
             self.zug += 1
             self.take_snapshot()
+            if self.check_draw():
+               print("draw!")
+               self.playing = False
+            if self.check_win():
+               
 
-
+               
 
 
 
@@ -85,7 +90,11 @@ class Spiel:
         else: self.cur_player = "white"
 
   def get_user_input(self, message: str):
-      user_in = input(self.cur_player +": " + message)    # (q,x,y),(q,x,y)
+      
+      user_in = input(self.cur_player +": " + message) 
+
+      if user_in = "new": self.playing = False;self.new_game()
+         # (q,x,y),(q,x,y)
       return ast.literal_eval(f"[{user_in}]")
 
   def check_move(self, ergebnis)-> bool:
@@ -138,7 +147,7 @@ class Spiel:
       return self.last_mühle == 50 or self.snapshots.count(self.spielfeld.felder) == 2
 
   def check_win(self) -> bool:
-      return self.spielphase > 17 and (self.spielfeld.get_piece_count(False) or (self.spielfeld.get_piece_count(True)))
+      return self.spielphase > 17 and (self.spielfeld.get_piece_count(False) < 3 or (self.spielfeld.get_piece_count(True) < 3))
 
 
 if __name__ == "__main__":
