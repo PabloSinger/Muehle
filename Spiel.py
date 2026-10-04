@@ -28,7 +28,7 @@ class Spiel:
     self.spielfeld.reset()
     self.snapshots = list()
     self.gameloop()
-     
+
 
 
   def gameloop(self):
@@ -48,6 +48,7 @@ class Spiel:
         print(f"Details: {e}")
       except KeyboardInterrupt:
         print("\nBye!")
+        return
 
   def spielzug(self):
 
@@ -56,7 +57,7 @@ class Spiel:
         if self.check_move(user_in):
             self.move(user_in)
             consol_graphics.draw(self.spielfeld.felder)
-          
+
             if self.check_mühle(user_in):
               self.handle_mühle()
               consol_graphics.draw(self.spielfeld.felder)
@@ -64,7 +65,7 @@ class Spiel:
             else:
               self.last_mühle += 1
             self.zug += 1
-           
+
 
 
 
@@ -131,7 +132,7 @@ class Spiel:
             return
   def take_snapshot(self):
      self.snapshots.append(copy.deepcopy(self.spielfeld.felder))
-   
+
   def check_draw(self) -> bool:
       return self.last_mühle == 50 or self.snapshots.count(self.spielfeld.felder) == 2
 
