@@ -55,6 +55,7 @@ class Spiel:
 
         if self.check_move(user_in):
             self.move(user_in)
+            consol_graphics.draw(self.spielfeld.felder)
           
             if self.check_mühle(user_in):
               self.handle_mühle()
@@ -63,7 +64,7 @@ class Spiel:
             else:
               self.last_mühle += 1
             self.zug += 1
-            consol_graphics.draw(self.spielfeld.felder)
+           
 
 
 
