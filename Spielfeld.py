@@ -74,3 +74,11 @@ class Spielfeld:
         if all(self.felder[pos[0]][pos[1]][i] == self.felder[pos[0]][pos[1]][pos[2]] for i in range(3)):
                 return True
         return False
+        
+    def is_removable(self,remove_pos):
+        if self.check_mühle(remove_pos):
+            if all(map(self.check_mühle,[feld == self.get_field_state(remove_pos) for feld in self])):
+                return True
+            else: return False
+
+        return True
