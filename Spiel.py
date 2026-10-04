@@ -51,11 +51,15 @@ class Spiel:
             consol_graphics.draw(self.spielfeld.felder)
             if self.check_mühle(user_in):
               self.handle_mühle()
+              self.handle_mühle()
+            else:
+              self.last_mühle += 1
+            self.zug += 1
             
-              consol_graphics.draw(self.spielfeld.felder)
+        consol_graphics.draw(self.spielfeld.felder)
 
-        self.last_mühle += 1
-        self.zug += 1
+       
+        
 
   def set_conditions(self):
         if self.zug > 17:
