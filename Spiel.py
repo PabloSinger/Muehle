@@ -10,6 +10,7 @@ class Spiel:
   playing = None
   spielphase = None
   last_mühle = None
+  snapshots = None
 
 
 
@@ -24,7 +25,9 @@ class Spiel:
     self.cur_player = "white"
     self.playing = True
     self.spielfeld.reset()
+    self.snapshots = list()
     self.gameloop()
+     
 
 
   def gameloop(self):
@@ -123,9 +126,12 @@ class Spiel:
 
             self.spielfeld.remove_piece(remove_pos)
             return
-
+  def take_snapshot(self):
+     self.snapshots.append(copy.deepcopy(self.spielfeld.felder))
+   
   def check_draw(self) -> bool:
       return self.last_mühle == 50 or self.snapshots.count(self.spielfeld.felder) == 2
+
 
 if __name__ == "__main__":
     spiel = Spiel()
