@@ -13,7 +13,7 @@ class Spielfeld:
             for j in range(3):
                 for k in range(3):
                     if not (j == k == 1):
-                        yield self.felder[i][j][k]
+                        yield self.felder[i][j][k], (i,j,k)
 
     def field_exists(self, pos: position) -> bool:
         return all(i in range(3) for i in pos) and not (pos[1] == pos[2] == 1)
@@ -48,7 +48,7 @@ class Spielfeld:
             self.felder[start[0]][start[1]][start[2]] = None
 
     def get_piece_count(self, spieler: bool) -> int:
-        return len([i == spieler for i in self])
+        return len([feld == spieler for feld,coord in self])
 
     def remove_piece(self, pos: position) -> None:
         self.felder[pos[0]][pos[1]][pos[2]] = None
@@ -57,10 +57,10 @@ class Spielfeld:
 
         if (pos[1] + pos[2]) % 2 == 1:
             if all(self.felder[i][pos[1]][pos[2]] == self.felder[pos[0]][pos[1]][pos[2]] for i in range(3)):
-                 return True
-            elif pos[1] == 1 and self.check_col(pos):
                 return True
-            elif pos[2] == 1 and self.check_row(pos):
+            elif pos[2] == 1 and self.check_col(pos):
+                return True
+            elif pos[1] == 1 and self.check_row(pos):
                 return True
 
         else:
@@ -78,9 +78,10 @@ class Spielfeld:
         return False
         
     def is_removable(self,remove_pos):
+        remove_state = self.get_field_state(remove_pos)
         if self.check_mühle(remove_pos):
-            return all(map(self.check_mühle,[feld == self.get_field_state(remove_pos) for feld in self]))
-
+            return all(map(self.check_mühle,  [coord for feld, coord in self if feld == remove_state ] ))
+ 
         return True
 
     
