@@ -1,27 +1,28 @@
 import Spielfeld
-import ast
-import consol_graphics
-import copy
+import Gui
 
 class Spiel:
   gui = None
-  zug  = None
+  zug  = 0
+  zugphase = None
   spielfeld = None
   playing = None
   spielphase = None
   last_mühle = None
   snapshots = None
   player = None
+  start,destination = None,None
 
 
   def __init__(self):
-    self.player = {False: "Weis",True: "Schwarz"}
+    self.player = {False: "white",True: "gray"}
     self.spielfeld = Spielfeld.Spielfeld()
-    
+    self.gui = Gui.Gui(self)
 
 
   def new_game(self):
     self.zug = 0
+    self.zugphase = 1
     self.spielphase = 0
     self.last_mühle = 0
    
@@ -29,130 +30,170 @@ class Spiel:
     self.spielfeld.reset()
     self.snapshots = list()
     self.gameloop()
-
+    self.set_conditions()
 
 
   def gameloop(self):
 
-    print("spiel startet")
     while self.playing:
-      self.set_conditions()
 
-      #user input wird ausgewertet
-      try:
+        self.gui.check_user_in()
+        self.gui.draw()
 
-        self.spielzug()
+    self.gui.quit()
 
+  def user_klicked(self,pos):
 
-      except (ValueError, SyntaxError, IndexError) as e:
-        print(f"Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y),(q,x,y).")
-        print(f"Details: {e}")
-      except KeyboardInterrupt:
-        print("\nBye!")
-        return
+      print("zugphase",self.zugphase)
+      print("spielphase",self.spielphase)
 
-  def spielzug(self):
+      match self.zugphase:
+        case 0: 
+           if self.check_start(pos):
+            self.mark_start(pos)
+            self.zugphase = 1
+          
+        case 1:
 
-        user_in = self.get_user_input("Gib einen Zug ein!")
-
-        if self.check_move(user_in):
-            self.move(user_in)
-            consol_graphics.draw(self.spielfeld.felder)
-
-            if self.check_mühle(user_in):
-              self.handle_mühle()
-              consol_graphics.draw(self.spielfeld.felder)
-              self.last_mühle = 0
+          if pos == self.start:
+                self.mark_start(pos,False)
+                self.zugphase = 0
+          else:
+            if self.spielphase:
+              if self.check_move((self.start,pos)):
+                   self.spielzug(pos)
             else:
-              self.last_mühle += 1
-            self.zug += 1
-            self.take_snapshot()
-            if self.check_draw():
-               print("draw!")
-               self.playing = False
-            if self.check_win():
-               print(self.player[self.check_win()])
-               self.playing = False
-              
-  
+                if self.check_move((pos,)):
+                     self.spielzug(pos)
+            
+        case 2:
+            self.handle_mühle(pos)
+            
+
+  def mark_start(self,pos,rev = True):
+      if rev:
+       self.start = pos
+       self.gui.mark(pos,True)
+      else:
+        
+        self.gui.mark(pos,False)
+  def check_start(self,pos):
+          return self.spielfeld.get_field_state(pos) == self.zug%2
+
+
+  def spielzug(self,pos):
+
+    if self.spielphase:
+      self.move((self.start,pos))
+    else:
+      self.move((pos,))
+
+    if self.check_mühle(pos):
+            
+            self.zugphase = 2
+            self.last_mühle = 0
+            return
+    else:
+        
+          self.next_zug()
 
   def set_conditions(self):
-        if self.zug > 17:
-          self.spielphase = 1
-          if 4 > self.spielfeld.get_piece_count(self.zug%2):
-              self.spielphase = 2
-        print("spielphase", self.spielphase)
-        print("zug:",self.zug)
 
-   
+    self.zugphase = 1
+    if self.zug > 17:
+      self.zugphase = 0
+      self.spielphase = 1
+     
+      if 4 > self.spielfeld.get_piece_count(self.zug%2):
+          self.spielphase = 2
+         
+          
+  def check_move(self, movement)-> bool:
+        
+        if all(map(self.spielfeld.field_exists,movement)):
 
-  def get_user_input(self, message: str):
-      
-      user_in = input(self.player[bool(self.zug%2)]+": " + message) 
-
-      if user_in == "new": self.playing = False;self.new_game()
-         # (q,x,y),(q,x,y)
-      return ast.literal_eval(f"[{user_in}]")
-
-  def check_move(self, ergebnis)-> bool:
-
-        if all(map(self.spielfeld.field_exists,ergebnis)):
-          if self.spielphase == 0:
-            if self.spielfeld.check_move((self.zug%2,-1,-1),ergebnis[0],self.spielphase):
-                return True
-            else: print("Ungültiges Format!");return False
+          if self.spielphase:
+             if self.spielfeld.check_move(movement[0],movement[1],self.spielphase):
+                  return True
           else:
-            if self.spielfeld.check_move(ergebnis[0],ergebnis[1],self.spielphase):
-              return True
-            else: print("Ungültiges Format!");return False
+              if self.spielfeld.check_move((self.zug%2,-1,-1),movement[0],self.spielphase):
+                           return True
         else:
-          print("keine gültige eingabe!")
+          
           return False
 
-  def move(self, ergebnis):
-      if self.spielphase == 0:
-        self.spielfeld.move_piece((self.zug%2,-1,-1),ergebnis[0],self.spielphase)
-      else:
-          self.spielfeld.move_piece(ergebnis[0],ergebnis[1],self.spielphase)
-
-  def check_mühle(self,user_in)-> bool:
+  def move(self, movement):
+      
       if self.spielphase:
-        return self.spielfeld.check_mühle(user_in[1])
+        self.spielfeld.move_piece(movement[0],movement[1],self.spielphase)
       else:
-        return self.spielfeld.check_mühle(user_in[0])
+          self.spielfeld.move_piece((self.zug%2,-1,-1),movement[0],self.spielphase)
+      self.mark_start(self.start,False)
+
+  def check_mühle(self,pos)-> bool:
+   
+        return self.spielfeld.check_mühle(pos)
+   
+
+  def handle_mühle(self,remove_pos) -> None:
+    gegner = (self.zug + 1) % 2
+         
+    if not self.spielfeld.field_exists(remove_pos):
+                print("Feld existiert nicht!");return
+    if self.spielfeld.get_field_state(remove_pos) == gegner and self.spielfeld.is_removable(remove_pos):
+            self.spielfeld.remove_piece(remove_pos);
+            
+            self.next_zug()
+            return
+
+  def next_zug(self):
+        
+        self.take_snapshot()
+  
+        if self.check_draw():
+          print("draw")
+          self.playing = False;return
+        
+        elif self.check_win() is not None:
+          print(self.player[self.check_win()],"has won")
+          self.playing = False;return
+  
+        self.zug += 1
+        self.last_mühle += 1
+        self.set_conditions()
+      
+  
+
+  def take_snapshot(self):
+     
+     self.snapshots.append(self.deep_tuple(self.spielfeld.felder))
+
+  def deep_tuple(self,iterable):
+    
+        return tuple(self.deep_tuple(item) if isinstance(item, list) else item for item in iterable)
 
       
-
-  def handle_mühle(self) -> None:
-    gegner = (self.zug + 1) % 2
-    while True:
-        print("gebe bitte die zu entfernende positition ein")
-        try:
-            remove_pos = self.get_user_input("Welcher Stein soll entfernt werden?")[0]
-            if not self.spielfeld.field_exists(remove_pos):
-                print("Feld existiert nicht!")
-                continue
-        except ValueError:
-            print("Fehler: Ungültiges Format! Bitte nutze das Format (q,x,y).")
-            continue
-        if self.spielfeld.get_field_state(remove_pos) == gegner and self.spielfeld.is_removable(remove_pos):
-
-            self.spielfeld.remove_piece(remove_pos)
-            return
-  def take_snapshot(self):
-     self.snapshots.append(copy.deepcopy(self.spielfeld.felder))
-
   def check_draw(self) -> bool:
-      return self.last_mühle == 50 or self.snapshots.count(self.spielfeld.felder) == 2
+     
+      return self.last_mühle == 50 or self.snapshots.count(self.snapshots[len(self.snapshots)-1]) == 3
 
   def check_win(self) -> bool|None:
-    if self.spielphase > 17:
+    if self.zug > 17:
       if self.spielfeld.get_piece_count(False) < 3:
            return True
-      elif self.spielfeld.get_piece_count(True):
+      elif self.spielfeld.get_piece_count(True) < 3:
             return False
     return None
-  
+
+
+  def quit_game(self):
+     self.playing= False
+     
+
+  def get_spielfeld(self) -> Spielfeld:
+     return self.spielfeld
+
 if __name__ == "__main__":
     spiel = Spiel()
     spiel.new_game()
+
