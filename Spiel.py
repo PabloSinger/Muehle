@@ -28,7 +28,7 @@ class Spiel:
     self.zug = 0
     self.zugphase = 1
     self.spielphase = 0
-    
+
     self.last_mühle = 0
    
     self.playing = True
@@ -48,9 +48,6 @@ class Spiel:
     self.gui.quit()
 
   def user_klicked(self,pos):
-
-      print("zugphase",self.zugphase)
-      print("spielphase",self.spielphase)
 
       match self.zugphase:
         case 0: 
@@ -96,7 +93,6 @@ class Spiel:
     if self.check_mühle(pos):
             
             self.zugphase = 2
-            self.last_mühle = 0
             return
     else:
         
@@ -147,7 +143,7 @@ class Spiel:
                 print("Feld existiert nicht!");return
     if self.spielfeld.get_field_state(remove_pos) == gegner and self.spielfeld.is_removable(remove_pos):
             self.spielfeld.remove_piece(remove_pos);
-            
+            self.last_mühle = 0
             self.next_zug()
             return
 
@@ -201,4 +197,3 @@ class Spiel:
 if __name__ == "__main__":
     spiel = Spiel()
     spiel.new_game()
-
