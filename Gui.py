@@ -30,7 +30,7 @@ class Gui:
 
     pygame.init()
     self.window = pygame.display.set_mode((self.window_width, self.window_height),pygame.RESIZABLE)
-
+    self.transparent_surface = pygame.Surface(( self.window_width,self.window_height), pygame.SRCALPHA)
     self.init_ui()
     self.reshape()
 
@@ -146,7 +146,7 @@ class Gui:
 
     
   def draw_field(self):
-
+      
       pygame.draw.rect(
             self.window,
             self.bg_color,
@@ -198,12 +198,12 @@ class Gui:
           
       if self.marked_pos is not None:
         pygame.draw.circle(
-          self.window,
-          pygame.Color(100,0,0,a = 100),
+          self.transparent_surface,
+          pygame.Color(100,0,0,50),
           self.get_coord(self.marked_pos),
           self.radius*2
         )
-            
+      self.window.blit(self.transparent_surface, (0, 0))
     
   def quit(self):
     pygame.quit()
