@@ -1,4 +1,6 @@
 import pygame
+import pygame_gui
+import os
 
 class Gui:
 
@@ -8,12 +10,12 @@ class Gui:
   fg_color = "black"
   radius = 15
   thickness = 2
+  delta_time = 0
   
-
-
   
   def __init__(self,spiel):
 
+    
     self.field_x = 50
     self.field_y = 50
     self.field_size = 700
@@ -29,19 +31,43 @@ class Gui:
 
     pygame.init()
     self.window = pygame.display.set_mode((self.window_width, self.window_height),pygame.RESIZABLE)
-    self.field_rects = []
-   
 
-    self.text_font = pygame.font.SysFont("Arial",20)
-    self.text_surface = self.text_font.render("Zug:",self.spiel.zug,True,"red")
-    self.text_rect = self.text_surface.get_rect(bottomleft = (self.field_size,self.field_y))
-    
+    self.init_ui()
     self.reshape()
 
+    
+    self.clock = pygame.time.Clock()
+
+  def init_ui(self):
+      
+      self.text_font = pygame.font.SysFont("Arial",20)
+      self.text_surface = self.text_font.render("Zug:",self.spiel.zug,True,"red")
+      self.text_rect = self.text_surface.get_rect(bottomleft = (self.field_size,self.field_y))
+
+          
+      current_dir = os.path.dirname(os.path.abspath(__file__))
+      theme_path = os.path.join(current_dir, "gui_themes.json")
+
+      self.ui_manager = pygame_gui.UIManager((self.window_width, self.window_height),theme_path)
+     
+
+      self.new_game_button = pygame_gui.elements.UIButton(
+      relative_rect=pygame.Rect(
+
+          (self.field_x,self.field_y/8), (self.field_size/7,self.field_y/8*6)
+      ),  
+        text="new game!",
+        manager=self.ui_manager,
+        object_id= "#spezial_design")
+
+      
 
   def check_user_in(self):
-
+    
     for event in pygame.event.get():
+
+      
+      
       match event.type:
         case pygame.QUIT:
           print("quit game")
@@ -64,9 +90,12 @@ class Gui:
         case pygame.VIDEORESIZE:
           self.window_width,self.window_height = event.w, event.h
           self.reshape()
-    
-          
-       
+
+      self.ui_manager.process_events(event)
+      if event.type == pygame_gui.UI_BUTTON_PRESSED:
+        if event.ui_element == self.new_game_button:
+            self.spiel.new_game()
+
   def reshape(self):
 
     self.field_size = min(self.window_width,self.window_height)//10*9
@@ -77,9 +106,12 @@ class Gui:
     self.center_y = self.field_y + self.field_size//2
     self.thickness = self.field_size//200
     self.radius = self.thickness*5
-    self.text_surface = self.text_font.render("Zug: "+str(self.spiel.zug),self.fg_color,True)
+  
     self.text_rect = self.text_surface.get_rect(bottomleft = (self.field_size*0.9,self.field_y))
-        
+    self.ui_manager.set_window_resolution((self.window_width,self.window_height))
+    self.new_game_button.set_position((self.field_x,self.field_y/8)) 
+    self.new_game_button.set_dimensions((self.field_size/6,self.field_y/8*6))
+
 
   def is_in_field(self, mouse_pos: tuple[int,int]) -> bool:
       rel_x = mouse_pos[0] - self.center_x
@@ -93,24 +125,24 @@ class Gui:
           return pos
       return False
       
-
   def get_coord(self,pos: tuple[int,int,int])-> tuple[int,int ]:
 
     x = self.center_x + self.field_size/7*(3-pos[0])*(pos[1]-1)
     y = self.center_y - self.field_size/7*(3-pos[0])*(pos[2]-1)
     return x,y
 
-  def draw(self):
-     
+  def draw(self,delta_time):
+
       self.draw_gui()
-      self.draw_field()
-        
+      self.draw_field() 
       pygame.display.update()
+      self.ui_manager.update(delta_time)
 
   def draw_gui(self):
+    self.text_surface = self.text_font.render("Zug: "+str(self.spiel.zug),self.fg_color,True)
     self.window.fill("gray")
     self.window.blit(self.text_surface, self.text_rect)
-    
+    self.ui_manager.draw_ui(self.window)
     
 
     
@@ -174,3 +206,4 @@ class Gui:
       self.marked_pos = pos
     else:
        self.marked_pos = None
+       
