@@ -16,7 +16,7 @@ class Spiel:
   snapshots = None
   player = None
   start,destination = None,None
-  neighbouring_fields: dict[Coordinate,tuple[Coordinate]]
+ 
 
 
   def __init__(self):
