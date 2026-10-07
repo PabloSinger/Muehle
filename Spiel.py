@@ -1,5 +1,8 @@
 import Spielfeld
 import Gui
+import pygame
+
+
 
 class Spiel:
   gui = None
@@ -18,12 +21,14 @@ class Spiel:
     self.player = {False: "white",True: "gray"}
     self.spielfeld = Spielfeld.Spielfeld()
     self.gui = Gui.Gui(self)
+    self.clock = pygame.time.Clock()
 
 
   def new_game(self):
     self.zug = 0
     self.zugphase = 1
     self.spielphase = 0
+    
     self.last_mühle = 0
    
     self.playing = True
@@ -36,10 +41,10 @@ class Spiel:
   def gameloop(self):
 
     while self.playing:
-
+        delta_time = self.clock.tick(10)
         self.gui.check_user_in()
-        self.gui.draw()
-
+        self.gui.draw(delta_time)
+        
     self.gui.quit()
 
   def user_klicked(self,pos):
@@ -55,7 +60,7 @@ class Spiel:
           
         case 1:
 
-          if pos == self.start:
+          if pos == self.start: 
                 self.mark_start(pos,False)
                 self.zugphase = 0
           else:
