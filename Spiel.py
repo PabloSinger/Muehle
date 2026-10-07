@@ -188,13 +188,7 @@ class Spiel:
             return False
     return None
 
-  def check_deadlock(self, player: bool) -> bool:
-      result = []
-      for field, coordinate in self.spielfeld:
-        if field == player:
-          nfpos = self.neighbouring_fields[coordinate]
-          result.append(all(self.spielfeld.get_field_state(pos)) != None for pos in nfpos)
-      return all(result)
+
 
   def quit_game(self):
      self.playing= False
