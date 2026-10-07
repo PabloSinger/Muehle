@@ -2,11 +2,42 @@ type position = tuple[int, int, int]
 
 
 class Spielfeld:
+
+    
     felder: list[list[list[bool|None]]]
-    # steine: list[Stein.Stein]
+    neighboring_fields: dict
+
     def __init__(self) -> None:
         self.reset()
+        self.init_neighbors()
 
+    def init_neighbors(self):
+        for feld,coord in self:
+            q_dir = []
+            x_dir = []
+            y_dir = []
+            match coord[0]:
+                case 0 if coord[1] == 1 or coord[2] == 1: q_dir.append(1)
+                case 1 if coord[1] == 1 or coord[2] == 1: q_dir.append(1);q_dir.append(-1)
+                case 2 if coord[1] == 1 or coord[2] == 1: q_dir.append(-1)
+
+            match coord[1]:
+                case 0: x_dir.append(1)
+                case 1: x_dir.append(1);x_dir.append(-1)
+                case 2: x_dir.append(-1)
+            match coord[2]:
+                case 0: y_dir.append(1)
+                case 1: y_dir.append(1);x_dir.append(-1)
+                case 2: y_dir.append(-1)
+
+            züge = set()
+            for q in q_dir:
+                for x in x_dir:
+                    for y in y_dir:
+                        if not x == y == q == 0:
+                            züge.add((q,x,y))
+
+            return tuple(züge)
 
     def __iter__(self):
         for i in range(3):
@@ -14,6 +45,8 @@ class Spielfeld:
                 for k in range(3):
                     if not (j == k == 1):
                         yield self.felder[i][j][k], (i,j,k)
+
+        
 
     def field_exists(self, pos: position) -> bool:
         return all(i in range(3) for i in pos) and not (pos[1] == pos[2] == 1)
@@ -86,4 +119,3 @@ class Spielfeld:
         return True
 
     
-
