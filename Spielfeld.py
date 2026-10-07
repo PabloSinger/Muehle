@@ -17,7 +17,7 @@ class Spielfeld:
 
     def field_exists(self, pos: position) -> bool:
         return all(i in range(3) for i in pos) and not (pos[1] == pos[2] == 1)
-
+    
 
     def check_move(self, start: position, ziel: position, spielphase: int) -> bool:
         assert spielphase in range(3)   # Spielphasen: 0=Setzphase, 1=Zugphase, 2=Endphase
@@ -48,7 +48,8 @@ class Spielfeld:
             self.felder[start[0]][start[1]][start[2]] = None
 
     def get_piece_count(self, spieler: bool) -> int:
-        return len([feld == spieler for feld,coord in self])
+
+        return len([feld for feld, coord in self if feld == spieler])
 
     def remove_piece(self, pos: position) -> None:
         self.felder[pos[0]][pos[1]][pos[2]] = None
@@ -85,3 +86,4 @@ class Spielfeld:
         return True
 
     
+
