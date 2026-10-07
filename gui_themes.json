@@ -1,0 +1,13 @@
+{
+    "#spezial_design": {
+        "colours": {
+            "normal_bg": "#e74c3c",
+            "hovered_bg": "#c0392b",
+            "normal_text": "#ffffff"
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "20"
+        }
+    }
+}
