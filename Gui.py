@@ -146,7 +146,7 @@ class Gui:
 
     
   def draw_field(self):
-      
+      self.transparent_surface.fill((0, 0, 0, 0)) 
       pygame.draw.rect(
             self.window,
             self.bg_color,
@@ -209,6 +209,7 @@ class Gui:
     pygame.quit()
 
   def mark(self,pos,rev = True):
+
     if rev:
       self.marked_pos = pos
     else:
