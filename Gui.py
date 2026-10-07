@@ -15,7 +15,6 @@ class Gui:
   
   def __init__(self,spiel):
 
-    
     self.field_x = 50
     self.field_y = 50
     self.field_size = 700
@@ -66,8 +65,6 @@ class Gui:
     
     for event in pygame.event.get():
 
-      
-      
       match event.type:
         case pygame.QUIT:
           print("quit game")
@@ -75,7 +72,7 @@ class Gui:
 
         case pygame.MOUSEBUTTONDOWN:
           if self.get_field_pos(event.pos):
-            
+             
              self.spiel.user_klicked(self.get_field_pos(event.pos))
 
           self.mouse_down = True
@@ -118,7 +115,9 @@ class Gui:
       rel_y = mouse_pos[1] - self.center_y
 
       return abs(rel_x) <= self.field_size/2 and 0 <=  abs(rel_y) <= self.field_size/2
-   
+
+
+  
   def get_field_pos(self,mouse_pos: tuple[int,int])-> tuple[int,int,int]:
       for feld,pos in self.spiel.get_spielfeld():
         if pygame.math.Vector2(mouse_pos).distance_to(self.get_coord(pos)) <= self.radius*3:
@@ -196,6 +195,14 @@ class Gui:
             self.spiel.player[feld],
             (self.get_coord(pos)),
             self.radius)
+          
+      if self.marked_pos is not None:
+        pygame.draw.circle(
+          self.window,
+          pygame.Color(100,0,0,a = 100),
+          self.get_coord(self.marked_pos),
+          self.radius*2
+        )
             
     
   def quit(self):
